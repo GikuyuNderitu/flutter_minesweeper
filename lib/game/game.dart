@@ -1,6 +1,6 @@
 const initialCellValue = -3;
 const mineCellValue = -2;
-const emptyCellValue = -2;
+const emptyCellValue = 0;
 
 const smallBoardWidth = 5;
 const smallBoardHeight = 5;
@@ -37,15 +37,19 @@ class Cell {
   int get hashCode {
     return _value.hashCode;
   }
+
+  @override
+  String toString() => 'Cell: $value';
 }
 
-class Coord {
+class Point {
   final int x;
   final int y;
-  const Coord({required this.x, required this.y});
+  const Point({required this.x, required this.y});
 
+  @override
   bool operator ==(Object other) {
-    return other is Coord && x == other.x && y == other.y;
+    return other is Point && x == other.x && y == other.y;
   }
 
   @override
@@ -53,7 +57,7 @@ class Coord {
 
   @override
   String toString() => '''
-  Coord{x: $x, y: $y}
+  Point{x: $x, y: $y}
   ''';
 }
 
@@ -81,7 +85,7 @@ class Game {
       ),
       width: smallBoardWidth,
       height: smallBoardHeight,
-      mineRatio: .4,
+      mineRatio: .1,
       firstMovePlayed: false,
     );
   }
@@ -93,20 +97,6 @@ class Game {
 
   final bool firstMovePlayed;
 
-  bool move(Coord coord) {
-    assert(coord.x < 0 ||
-        coord.y < 0 ||
-        coord.x >= board.length ||
-        coord.y >= board.first.length);
-    if (!firstMovePlayed) {
-      initializeBoard(coord);
-      return true;
-    }
-    return false;
-  }
-
-  initializeBoard(Coord coord) {}
-
   Game copyWith(List<List<Cell>> board) {
     return Game._(
       board,
@@ -116,42 +106,61 @@ class Game {
       firstMovePlayed: true,
     );
   }
+
+  @override
+  String toString() => '''
+    Game {
+      board: [
+        ${_boardPrint()}
+      ],
+      width: $width
+      height: $height
+      mineRatio: $mineRatio
+      firstMovePlayed: $firstMovePlayed
+    }
+  ''';
+
+  String _boardPrint() {
+    return board
+        .expand((row) => row.map((cell) => cell.toString()))
+        .join('< | >');
+  }
 }
 
-/// Returns a list of [Coord]s surrounding the given [Coord] that contain a
-/// [Cell.mine]. Provided [coord] must be in bounds.
-List<Coord> numSurroundingMines(Coord coord, List<List<Cell>> board) {
-  final coords = getSurroundngCoords(coord, board);
+/// Returns a list of [Point]s surrounding the given [Point] that contain a
+/// [Cell.mine]. Provided [point] must be in bounds.
+List<Point> numSurroundingMines(Point point, List<List<Cell>> board) {
+  final points = getSurroundngPoints(point, board);
 
-  return coords
-      .where((coord) => board[coord.x][coord.y] == Cell.mine)
+  return points
+      .where((nextPoint) => board[nextPoint.x][nextPoint.y] == Cell.mine)
       .toList(growable: false);
 }
 
-/// Returns a list of [Coord]s surrounding the given [Coord] that are within the
-/// bounds of  the given board. Provided [coord] must be in bounds.
-List<Coord> getSurroundngCoords(Coord coord, List<List<Cell>> board) {
-  final x = coord.x;
-  final y = coord.y;
+/// Returns a list of [Point]s surrounding the given [Point] that are within the
+/// bounds of  the given board. Provided [point] must be in bounds.
+List<Point> getSurroundngPoints(Point point, List<List<Cell>> board) {
+  final x = point.x;
+  final y = point.y;
 
   assert(x >= 0 && y >= 0 && x < board.length && y < board.first.length);
 
   return [
-    Coord(x: x - 1, y: y - 1),
-    Coord(x: x - 1, y: y),
-    Coord(x: x - 1, y: y + 1),
-    Coord(x: x, y: y - 1),
-    Coord(x: x, y: y + 1),
-    Coord(x: x + 1, y: y - 1),
-    Coord(x: x + 1, y: y),
-    Coord(x: x + 1, y: y + 1),
+    Point(x: x - 1, y: y - 1),
+    Point(x: x - 1, y: y),
+    Point(x: x - 1, y: y + 1),
+    Point(x: x, y: y - 1),
+    Point(x: x, y: y + 1),
+    Point(x: x + 1, y: y - 1),
+    Point(x: x + 1, y: y),
+    Point(x: x + 1, y: y + 1),
   ]
       .where(
-        (nextCoord) =>
-            nextCoord.x >= 0 &&
-            nextCoord.y >= 0 &&
-            nextCoord.x < board.length &&
-            nextCoord.y < board.first.length,
+        (nextPoint) =>
+            nextPoint.x >= 0 &&
+            nextPoint.y >= 0 &&
+            nextPoint.x < board.length &&
+            nextPoint.y < board.first.length,
       )
       .toList(growable: false);
 }
