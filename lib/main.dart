@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minesweeper/game/game.dart';
+import 'package:minesweeper/game/game_cubit.dart';
+
+import 'game/game_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,21 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        child: BlocProvider(
+          create: (_) => GameCubit(Game.small),
+          child: const GameView(),
         ),
       ),
       floatingActionButton: FloatingActionButton(
