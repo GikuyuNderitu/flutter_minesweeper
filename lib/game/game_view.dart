@@ -43,11 +43,16 @@ class CellView extends StatelessWidget {
       child: GestureDetector(
         onTap: () => context.read<GameCubit>().move(point),
         child: Container(
-          color: _cellToColor(cell),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, strokeAlign: 2.0),
+            color: _cellToColor(cell),
+          ),
           padding: const EdgeInsets.all(58.0),
-          child: Text(
-            number,
-            style: textTheme.headlineLarge?.copyWith(color: textColor),
+          child: Center(
+            child: Text(
+              number,
+              style: textTheme.headlineLarge?.copyWith(color: textColor),
+            ),
           ),
         ),
       ),
