@@ -27,6 +27,9 @@ class GameCubit extends Cubit<Game> {
     _updateBoard(point);
   }
 
+  // Places flag for the provided point.
+  void placeFlag(Point point) {}
+
   Game _initializeBoard(Point point) {
     final nextBoard = state.boardCopy;
     int numMines = state.numMines;
