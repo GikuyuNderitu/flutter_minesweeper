@@ -67,11 +67,11 @@ class GameCubit extends Cubit<Game> {
     // If there are no surrounding mines, reveal edges in every direction.
     if (surroundingMines.isEmpty) {
       nextBoard = expand(point, nextBoard);
+    } else {
+      // There are now guaranteed surrounding mines. Paint [Point] with number of
+      // surrounding mines.
+      nextBoard[point.x][point.y] = Cell.surrounded(surroundingMines.length);
     }
-
-    // There are now guaranteed surrounding mines. Paint [Point] with number of
-    // surrounding mines.
-    nextBoard[point.x][point.y] = Cell.surrounded(surroundingMines.length);
 
     emit(state.copyWith(nextBoard));
 
