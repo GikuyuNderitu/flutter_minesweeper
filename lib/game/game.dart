@@ -62,7 +62,7 @@ class Point {
 }
 
 class Game {
-  const Game._(
+  Game._(
     this.board, {
     required this.mineRatio,
     required this.width,
@@ -72,7 +72,8 @@ class Game {
           width > 3 && height > 3,
           'The width and height must be greater than 3',
         ),
-        assert(mineRatio > 0 && mineRatio < 1);
+        assert(mineRatio > 0 && mineRatio < 1),
+        numMines = (width * height * mineRatio).floor();
 
   factory Game.small() {
     return Game._(
@@ -93,6 +94,7 @@ class Game {
   final List<List<Cell>> board;
   final int width;
   final int height;
+  final int numMines;
   final double mineRatio;
 
   final bool firstMovePlayed;
@@ -116,6 +118,7 @@ class Game {
       width: $width
       height: $height
       mineRatio: $mineRatio
+      numMines: $numMines
       firstMovePlayed: $firstMovePlayed
     }
   ''';

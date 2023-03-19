@@ -29,7 +29,7 @@ class GameCubit extends Cubit<Game> {
 
   Game _initializeBoard(Point point) {
     final nextBoard = state.board.map((e) => e.map((c) => c).toList()).toList();
-    int numMines = (state.width * state.height * state.mineRatio).floor();
+    int numMines = state.numMines;
 
     nextBoard[point.x][point.y] = Cell.emptySpace;
 
