@@ -24,7 +24,7 @@ class GameCubit extends Cubit<Game> {
       return;
     }
 
-    emit(_updateBoard(point));
+    _updateBoard(point);
   }
 
   Game _initializeBoard(Point point) {
@@ -55,13 +55,12 @@ class GameCubit extends Cubit<Game> {
     return state.copyWith(finalBoard);
   }
 
-  Game _updateBoard(Point point) {
+  void _updateBoard(Point point) async {
     // (If tapped a mine, you've lost the game)
     final nextBoard = state.board;
     if (state.board[point.x][point.y] == Cell.mine) {
       // TODO: Show all mines
       assert(false);
-      return state;
     }
     final surroundingMines = numSurroundingMines(point, state.board);
 
@@ -69,13 +68,18 @@ class GameCubit extends Cubit<Game> {
     if (surroundingMines.isEmpty) {
       // TODO: Reveal mine edges.
       assert(false);
-      return state;
     }
 
     // There are now guaranteed surrounding mines. Paint [Point] with number of
     // surrounding mines.
     nextBoard[point.x][point.y] = Cell.surrounded(surroundingMines.length);
 
-    return state.copyWith(nextBoard);
+    emit(state.copyWith(nextBoard));
+
+    // Render board
+    await Future.delayed(Duration.zero);
+
+    //Check to see if game is won.
+    //TODO: Check if game is won.
   }
 }
