@@ -26,13 +26,18 @@ class GameCubit extends Cubit<Game> {
 
     nextBoard[point.x][point.y] = Cell.emptySpace;
 
+    final surroundingPoints = getSurroundngPoints(point, nextBoard);
+
     while (numMines > 0) {
       final nextX = fromRange(0, state.width);
       final nextY = fromRange(0, state.height);
+      final nextPoint = Point(x: nextX, y: nextY);
 
-      /// TODO: Add boundary logic for not letting [point] or any of the cells
-      /// TODO: that surround [point] to be a mine.
-      if (nextBoard[nextX][nextY].value == initialCellValue) {
+      final pointInSurrounding = surroundingPoints.any(
+        (point) => point == nextPoint,
+      );
+      if (nextBoard[nextX][nextY].value == initialCellValue &&
+          !pointInSurrounding) {
         nextBoard[nextY][nextY] = Cell.mine;
         numMines--;
       }
