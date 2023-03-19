@@ -20,18 +20,9 @@ class GameCubit extends Cubit<Game> {
     emit(_updateBoard(point));
   }
 
-  @override
-  void onChange(Change<Game> change) {
-    print('Current State: \n ${change.currentState}');
-    super.onChange(change);
-    print('Next State: \n ${change.nextState}');
-  }
-
   Game _initializeBoard(Point point) {
     final nextBoard = state.board.map((e) => e.map((c) => c).toList()).toList();
     int numMines = (state.width * state.height * state.mineRatio).floor();
-
-    print(numMines);
 
     nextBoard[point.x][point.y] = Cell.emptySpace;
 
@@ -41,14 +32,15 @@ class GameCubit extends Cubit<Game> {
 
       /// TODO: Add boundary logic for not letting [point] or any of the cells
       /// TODO: that surround [point] to be a mine.
-      print('Next X: $nextX');
-      print('Next Y: $nextY');
       if (nextBoard[nextX][nextY].value == initialCellValue) {
         nextBoard[nextY][nextY] = Cell.mine;
         numMines--;
       }
     }
-    return state.copyWith(nextBoard);
+
+    final finalBoard = expand(point, nextBoard);
+
+    return state.copyWith(finalBoard);
   }
 
   Game _updateBoard(Point point) {

@@ -111,7 +111,7 @@ class Game {
   String toString() => '''
     Game {
       board: [
-        ${_boardPrint()}
+        ${board.string()}
       ],
       width: $width
       height: $height
@@ -119,12 +119,11 @@ class Game {
       firstMovePlayed: $firstMovePlayed
     }
   ''';
+}
 
-  String _boardPrint() {
-    return board
-        .expand((row) => row.map((cell) => cell.toString()))
-        .join('< | >');
-  }
+extension BoardPrint on List<List<Cell>> {
+  String string() =>
+      this.expand((row) => row.map((cell) => cell.toString())).join('< | >');
 }
 
 /// Returns a list of [Point]s surrounding the given [Point] that contain a
@@ -163,4 +162,33 @@ List<Point> getSurroundngPoints(Point point, List<List<Cell>> board) {
             nextPoint.y < board.first.length,
       )
       .toList(growable: false);
+}
+
+/// Modifies given board by expanding from a given coord until all provided
+/// points that have been reached touch a mine.
+List<List<Cell>> expand(Point startingPoint, List<List<Cell>> board) {
+  return _expand(startingPoint, board, {});
+}
+
+List<List<Cell>> _expand(
+  Point point,
+  List<List<Cell>> board,
+  Set<Point> visited,
+) {
+  if (visited.contains(point)) return board;
+  visited.add(point);
+
+  final mines = numSurroundingMines(point, board);
+
+  if (mines.isNotEmpty) {
+    board[point.x][point.y] = Cell.surrounded(mines.length);
+    return board;
+  }
+
+  board[point.x][point.y] = Cell.emptySpace;
+  var nextBoard = board;
+  for (final nextPoint in getSurroundngPoints(point, board)) {
+    nextBoard = _expand(nextPoint, nextBoard, visited);
+  }
+  return nextBoard;
 }
