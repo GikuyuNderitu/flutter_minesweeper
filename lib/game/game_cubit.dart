@@ -28,7 +28,7 @@ class GameCubit extends Cubit<Game> {
   }
 
   Game _initializeBoard(Point point) {
-    final nextBoard = state.board.map((e) => e.map((c) => c).toList()).toList();
+    final nextBoard = state.boardCopy;
     int numMines = state.numMines;
 
     nextBoard[point.x][point.y] = Cell.emptySpace;
@@ -57,7 +57,7 @@ class GameCubit extends Cubit<Game> {
 
   void _updateBoard(Point point) async {
     // (If tapped a mine, you've lost the game)
-    final nextBoard = state.board;
+    final nextBoard = state.boardCopy;
     if (state.board[point.x][point.y] == Cell.mine) {
       // TODO: Show all mines
       assert(false);

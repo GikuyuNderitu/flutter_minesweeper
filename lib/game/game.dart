@@ -109,6 +109,11 @@ class Game {
     );
   }
 
+  /// Deep copies the board. Expensive, use only to obtain a new reference for
+  /// updating state.
+  List<List<Cell>> get boardCopy =>
+      board.map((e) => e.map((c) => c).toList()).toList();
+
   @override
   String toString() => '''
     Game {
