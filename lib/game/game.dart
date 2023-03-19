@@ -72,8 +72,7 @@ class Game {
           width > 3 && height > 3,
           'The width and height must be greater than 3',
         ),
-        assert(mineRatio > 0 && mineRatio < 1),
-        numMines = (width * height * mineRatio).floor();
+        assert(mineRatio > 0 && mineRatio < 1);
 
   factory Game.small() {
     return Game._(
@@ -94,10 +93,11 @@ class Game {
   final List<List<Cell>> board;
   final int width;
   final int height;
-  final int numMines;
   final double mineRatio;
 
   final bool firstMovePlayed;
+
+  int get numMines => (width * height * mineRatio).floor();
 
   Game copyWith(List<List<Cell>> board) {
     return Game._(
