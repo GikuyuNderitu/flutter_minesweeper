@@ -35,8 +35,6 @@ class GameCubit extends Cubit<Game> {
 
     nextBoard[point.x][point.y] = Cell.emptySpace;
 
-    final pointsToZero = getSurroundngPoints(point, nextBoard);
-
     while (numMines > 0) {
       final nextX = fromRange(0, state.width);
       final nextY = fromRange(0, state.height);
