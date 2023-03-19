@@ -34,11 +34,11 @@ class GameCubit extends Cubit<Game> {
       final nextPoint = Point(x: nextX, y: nextY);
 
       final pointInSurrounding = surroundingPoints.any(
-        (point) => point == nextPoint,
+        (surrounding) => surrounding == nextPoint,
       );
-      if (nextBoard[nextX][nextY].value == initialCellValue &&
-          !pointInSurrounding) {
-        nextBoard[nextY][nextY] = Cell.mine;
+      if (!pointInSurrounding &&
+          nextBoard[nextX][nextY].value == initialCellValue) {
+        nextBoard[nextX][nextY] = Cell.mine;
         numMines--;
       }
     }
