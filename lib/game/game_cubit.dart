@@ -11,7 +11,14 @@ class GameCubit extends Cubit<Game> {
   GameCubit(Game Function() gameFactory) : super(gameFactory());
 
   void move(Point point) {
-    // TODO: Boundary check point.
+    assert(
+      point.x >= 0 &&
+          point.x < state.board.length &&
+          point.y >= 0 &&
+          point.y < state.board.first.length,
+      'Point should be within the bounds of the board',
+    );
+
     if (!state.firstMovePlayed) {
       emit(_initializeBoard(point));
       return;
