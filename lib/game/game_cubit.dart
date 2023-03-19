@@ -57,7 +57,7 @@ class GameCubit extends Cubit<Game> {
 
   void _updateBoard(Point point) async {
     // (If tapped a mine, you've lost the game)
-    final nextBoard = state.boardCopy;
+    var nextBoard = state.boardCopy;
     if (state.board[point.x][point.y] == Cell.mine) {
       // TODO: Show all mines
       assert(false);
@@ -66,8 +66,7 @@ class GameCubit extends Cubit<Game> {
 
     // If there are no surrounding mines, reveal edges in every direction.
     if (surroundingMines.isEmpty) {
-      // TODO: Reveal mine edges.
-      assert(false);
+      nextBoard = expand(point, nextBoard);
     }
 
     // There are now guaranteed surrounding mines. Paint [Point] with number of
