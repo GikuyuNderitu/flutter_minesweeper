@@ -122,8 +122,10 @@ class Game {
 }
 
 extension BoardPrint on List<List<Cell>> {
-  String string() =>
-      this.expand((row) => row.map((cell) => cell.toString())).join('< | >');
+  String string() => this
+      .expand(
+          (row) => [...row.map((cell) => cell.toString())..join('< | >'), '\n'])
+      .join();
 }
 
 /// Returns a list of [Point]s surrounding the given [Point] that contain a
